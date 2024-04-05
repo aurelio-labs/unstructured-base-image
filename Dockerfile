@@ -1,7 +1,8 @@
 FROM python:3.11-slim as builder
 
-# Set build environment variable
 ENV DOCKER_BUILDKIT=1
+
+LABEL org.opencontainers.image.source=https://github.com/aurelio-labs/unstructured-base-image
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
@@ -42,7 +43,6 @@ FROM python:3.11-slim
 LABEL maintainer="aurelio" \
     vendor="aurelio"
 
-# Set environment variables
 ENV GPU_ENABLED=false \
     PANDOC_VERSION=3.1.9
 
@@ -66,7 +66,7 @@ RUN apt-get update && apt-get install -y \
     && python -m nltk.downloader punkt -d /root/nltk_data \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Pandoc (adjust if necessary for Alpine)
+# Install Pandoc
 RUN ARCH=$(dpkg --print-architecture) && \
     if [ "$ARCH" = "amd64" ]; then PANDOC_ARCH="amd64"; elif [ "$ARCH" = "arm64" ]; then PANDOC_ARCH="arm64"; fi && \
     pandoc_filename=pandoc-"$PANDOC_VERSION"-linux-"$PANDOC_ARCH".tar.gz && \
