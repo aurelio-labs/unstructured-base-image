@@ -8,20 +8,12 @@ RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     poppler-utils \
     tesseract-ocr \
+    git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-
-FROM python:3.11-slim
-
-LABEL maintainer="aurelio" \
-    vendor="aurelio"
-
-COPY --from=builder /usr/local/bin /usr/local/bin
-COPY --from=builder /usr/local/lib /usr/local/lib
-COPY --from=builder /usr/local/include /usr/local/include
-COPY --from=builder /usr/local/share /usr/local/share
-
-# Install runtime dependencies and necessary tools
-# CPU
-RUN pip install torch==2.2.1 torchvision==0.17.1 --index-url https://download.pytorch.org/whl/cpu && \
-    pip install "unstructured[pdf]==0.13.2"
+# Install Tesseract language data (english and osd)
+RUN mkdir -p /usr/local/share/tessdata && \
+    cd /usr/local/share/tessdata && \
+    curl -O https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata && \
+    curl -O https://github.com/tesseract-ocr/tessdata/raw/main/osd.traineddata
