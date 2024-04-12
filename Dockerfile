@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     poppler-utils \
     tesseract-ocr \
+    ffmpeg \
     git \
     curl \
     && rm -rf /var/lib/apt/lists/*
