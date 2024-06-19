@@ -18,3 +18,16 @@ RUN mkdir -p /usr/local/share/tessdata && \
     cd /usr/local/share/tessdata && \
     curl -O https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata && \
     curl -O https://github.com/tesseract-ocr/tessdata/raw/main/osd.traineddata
+
+# Conditional installation script for PyTorch and torchvision
+COPY install_pytorch.sh /install_pytorch.sh
+RUN chmod +x /install_pytorch.sh && /install_pytorch.sh
+
+# Install Python dependencies
+RUN pip install --no-cache-dir nltk timm pikepdf 'transformers[torch]'
+
+# Copy the script that pre-downloads models and NLTK data
+COPY pre_download_models.py /pre_download_models.py
+
+# Run the script to pre-download models and NLTK data
+RUN python /pre_download_models.py
