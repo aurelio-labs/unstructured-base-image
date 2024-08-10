@@ -1,6 +1,7 @@
 import os
-import requests
+
 import nltk
+import requests
 import timm
 from transformers import AutoModel
 
@@ -31,7 +32,13 @@ def download_timm_model(model_name):
 
 
 def download_nltk_data():
-    nltk_data_sets = ["punkt", "wordnet", "averaged_perceptron_tagger", "stopwords"]
+    nltk_data_sets = [
+        "punkt",
+        "punkt_tab",
+        "wordnet",
+        "averaged_perceptron_tagger",
+        "stopwords",
+    ]
     print("Downloading NLTK data sets...")
     for data_set in nltk_data_sets:
         nltk.download(data_set)
@@ -43,7 +50,9 @@ if __name__ == "__main__":
     download_transformers_model("microsoft/table-transformer-structure-recognition")
 
     # YOLOX model
-    model_url = "https://huggingface.co/unstructuredio/yolo_x_layout/blob/main/yolox_l0.05.onnx"
+    model_url = (
+        "https://huggingface.co/unstructuredio/yolo_x_layout/blob/main/yolox_l0.05.onnx"
+    )
     save_path = "/root/.cache/huggingface/hub/models--unstructuredio--yolo_x_layout/yolox_l0.05.onnx"
     download_file_from_url(model_url, save_path)
 
