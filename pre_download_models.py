@@ -34,15 +34,40 @@ def download_timm_model(model_name):
 def download_nltk_data():
     nltk_data_sets = [
         "punkt",
-        "punkt_tab",
         "wordnet",
         "averaged_perceptron_tagger",
         "stopwords",
     ]
-    print("Downloading NLTK data sets...")
+    # Define the desired paths where the packages should exist
+    desired_paths = [
+        "/root/nltk_data",
+        "/usr/local/nltk_data",
+        "/usr/local/share/nltk_data",
+        "/usr/local/lib/nltk_data",
+        "/usr/share/nltk_data",
+        "/usr/lib/nltk_data",
+    ]
+
+    print("Downloading and validating NLTK data sets...")
     for data_set in nltk_data_sets:
-        nltk.download(data_set)
-    print("NLTK data sets downloaded and cached successfully.")
+        try:
+            # Attempt to find the data set to see if it's already downloaded
+            nltk.data.find(f"tokenizers/{data_set}")
+            print(f"{data_set} already downloaded.")
+        except LookupError:
+            # If the data set is not found, download it
+            nltk.download(data_set)
+            print(f"{data_set} downloaded successfully.")
+
+        # Validate if the data set exists in the desired paths
+        found = False
+        for path in desired_paths:
+            if os.path.exists(os.path.join(path, "tokenizers", data_set)):
+                print(f"{data_set} exists in {path}")
+                found = True
+                break
+        if not found:
+            print(f"Warning: {data_set} not found in the desired paths after download.")
 
 
 if __name__ == "__main__":
