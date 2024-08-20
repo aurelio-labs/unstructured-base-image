@@ -1,4 +1,4 @@
-FROM python:3.11-slim as builder
+FROM python:3.12-slim as builder
 
 ENV DOCKER_BUILDKIT=1
 
